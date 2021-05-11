@@ -60,7 +60,7 @@ class ApplicationInsightsLoggingService(services.Service):
 
             try:
                 await self._base_instance.process(ctx)
-            except ValueError as ex:
+            except Exception as ex:
                 ctx.logger.exception(str(ex))
                 raise
 
