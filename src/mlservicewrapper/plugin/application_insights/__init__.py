@@ -1,5 +1,6 @@
 
 import logging
+import os
 
 from mlservicewrapper.core import contexts, server, services
 from opencensus.ext.azure import metrics_exporter
@@ -30,7 +31,10 @@ class ApplicationInsightsLoggingService(services.Service):
 
         config_integration.trace_integrations(['logging'])
 
-        connection_string = ctx.get_parameter_value("ApplicationInsightsConnectionString", required=False)
+        connection_string = os.environ.get("APPLICATIONINSIGHTS_CONNECTION_STRING")
+        
+        if connection_string is None:
+            connection_string = ctx.get_parameter_value("ApplicationInsightsConnectionString", required=False)
 
         if connection_string is None:
             logging.warn("Application Insights is not enabled, set the ApplicationInsightsConnectionString parameter to capture logs.")
